@@ -88,3 +88,104 @@ AZURE_*
 
 # Airflow runtime / local credentials
 /opt/airflow/credentials/
+/airflow/credentials/
+airflow/credentials/
+```// filepath: d:\Work_2\etl_airflow_minio\.gitignore
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+env/
+venv/
+.venv/
+.venv*/
+venv*/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+coverage.xml
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and databases
+*.log
+logs/
+airflow/logs/
+ /opt/airflow/logs/
+airflow/airflow.db
+airflow/airflow.cfg
+
+# Credentials & secrets
+# environment files and overrides
+.env
+.env.*
+*.env.local
+docker-compose.*.env
+
+# common credential files
+credentials/
+credentials.*
+credentials.json
+client_secret*.json
+service-account*.json
+service_account*.json
+token.json
+oauth2*.json
+secrets/
+secrets.yml
+secrets.yaml
+credentials.yml
+credentials.yaml
+
+# SSH / keys / certs
+id_rsa
+id_rsa.pub
+*.pem
+*.key
+*.crt
+*.p12
+
+# Cloud SDK / credentials
+.envrc
+.aws/
+.aws/credentials
+.gcloud/
+.gcloud/credentials
+.google/
+azure/
+.azure/
+AZURE_*
+*.vault-token
+.keyring
+.netrc
+
+# Local data / runtime
+tmp/
+temp/
+*.tmp
+*.swp
+
+# Airflow runtime / local credentials
+/opt/airflow/credentials/
+/airflow/credentials/
+airflow/credentials/
