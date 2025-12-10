@@ -1,0 +1,9 @@
+apache-airflow==2.9.2
+apache-airflow-providers-google
+apache-airflow-providers-apache-spark
+pyspark==3.5.1
+pandas
+psycopg2-binary
+boto3
+minio
+rclone-python
