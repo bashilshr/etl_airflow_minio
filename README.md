@@ -67,17 +67,8 @@ Small repository that ingests CSVs (from Google Drive or local), runs a Spark ET
 - Writes processed outputs to `OUTPUT_DIR` and compressed files under `OUTPUT_DIR/compressed`.
 - Pushes aggregate results to XCom key `loan_aggregates`.
 
-## Data quality & testing (recommended)
-- Unit tests: pytest + local SparkSession to test transformation logic (e.g., timestamp splitting, missing value handling).
-- Data-quality: use Great Expectations or custom assertions for schema, null thresholds, numeric ranges.
-- Integration tests: run the full stack, upload test files, trigger DAG, assert MinIO objects and registry update.
-- CI: run unit tests and data-quality checks on PRs.
-
 ## Useful commands (PowerShell)
 - Run tests inside Airflow container:
-  ```powershell
-  docker exec -it etl_airflow_minio-airflow-1 bash -lc "pytest -q"
-  ```
 - Trigger DAG:
   ```powershell
   docker exec -it etl_airflow_minio-airflow-1 bash -lc "airflow dags trigger spark_etl_loan_dag"
@@ -87,32 +78,10 @@ Small repository that ingests CSVs (from Google Drive or local), runs a Spark ET
   docker exec -it etl_airflow_minio-airflow-1 bash -lc "airflow tasks logs spark_etl_loan_dag spark_etl_job <execution_date>"
   ```
 
-## Secrets & credentials (security)
-- Add credentials to `.gitignore` (the repo contains a recommended `.gitignore`).
-- .gitignore only prevents new untracked files from being added — it does NOT remove files already committed.
-- To remove tracked credentials and keep them locally:
-  ```powershell
-  git add .gitignore
-  git commit -m "Add .gitignore"
-  git rm -r --cached airflow/credentials
-  git commit -m "Remove credentials from repo (keep locally)"
-  git push
-  ```
-- If secrets were already pushed, rotate them and consider a history rewrite (git-filter-repo or BFG) — coordinate with your team.
-
 ## Troubleshooting
 - Tasks unexpectedly skipped: check `fetch_files` output and `processed_registry.json`.
 - Compressed/processed file info missing in email: ensure ETL writes to `OUTPUT_DIR` and compressed files to `OUTPUT_DIR/compressed`; the DAG resolves file stems to find matching processed/compressed files.
 - Email fails: validate `smtp_default` connection, network reachability, and credentials; use MailHog for local dev if needed.
-
-## Next improvements (suggestions)
-- Add unit tests and CI (GitHub Actions).
-- Add Great Expectations suites and integrate them into DAG or CI.
-- Add integration tests that upload a file to MinIO and assert end-to-end behavior.
-- Add secure secret management (Vault / Kubernetes secrets) for production.
-
-## Contact / Maintainer
-- Repository owner / maintainer: refer to repository metadata or contact internal team.
 
 # etl_airflow_minio
 
