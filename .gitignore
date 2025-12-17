@@ -188,4 +188,6 @@ temp/
 # Airflow runtime / local credentials
 /opt/airflow/credentials/
 /airflow/credentials/
-airflow/credentials/
+airflow/credentials/docker-compose.yml
+docker-compose.override.yml
+docker-compose.*.yml
