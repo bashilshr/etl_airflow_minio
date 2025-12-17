@@ -89,15 +89,36 @@ def _human_size(num: int | None) -> str:
     return f"{value:.2f} {units[idx]}"
 
 
-def _resolve_output(base: Path, target_name: str) -> Path | None:
-    direct = base / target_name
+def _resolve_output(base: Path, raw_name: str, *, keywords: Iterable[str] | None = None) -> Path | None:
+    """Return the most recent file in *base* that maps to *raw_name*.
+
+    Spark outputs include hashes (e.g. `foo_raw_deadbeef_processed_<ts>.csv.gz`),
+    so we match by raw stem and optional keyword markers.
+    """
+
+    if not base.exists():
+        return None
+
+    direct = base / raw_name
     if direct.exists():
         return direct
-    stem = Path(target_name).stem
-    for candidate in base.rglob("*"):
-        if candidate.is_file() and candidate.stem == stem:
-            return candidate
-    return None
+
+    raw_stem = Path(raw_name).stem
+    candidate_files: list[Path] = []
+
+    for candidate in base.iterdir():
+        if not candidate.is_file():
+            continue
+        if raw_stem not in candidate.stem:
+            continue
+        if keywords and not any(marker in candidate.name for marker in keywords):
+            continue
+        candidate_files.append(candidate)
+
+    if not candidate_files:
+        return None
+
+    return max(candidate_files, key=lambda path: path.stat().st_mtime)
 
 
 def record_processed(ti, **_):
@@ -112,11 +133,11 @@ def record_processed(ti, **_):
 
         original_size = raw_path.stat().st_size if raw_path.exists() else None
 
-        processed_obj = _resolve_output(OUTPUT_DIR, raw_path.name)
+        processed_obj = _resolve_output(OUTPUT_DIR, raw_path.name, keywords=("_processed_",))
         processed_size = processed_obj.stat().st_size if processed_obj and processed_obj.exists() else None
 
         compressed_base = OUTPUT_DIR / "compressed"
-        compressed_obj = _resolve_output(compressed_base, f"{raw_path.name}.gz")
+        compressed_obj = _resolve_output(compressed_base, raw_path.name, keywords=("_compressed_", ".gz"))
         compressed_size = compressed_obj.stat().st_size if compressed_obj and compressed_obj.exists() else None
 
         ratio = (
