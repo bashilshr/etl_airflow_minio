@@ -7,7 +7,7 @@ from pyspark.sql.types import StringType
 from py4j.java_gateway import java_import
 from datetime import datetime, timezone
 import hashlib
-from functools import reduce  # <-- add this import
+from functools import reduce
 
 def parse_args():
     p = argparse.ArgumentParser()
