@@ -190,4 +190,5 @@ temp/
 /airflow/credentials/
 airflow/credentials/docker-compose.yml
 docker-compose.override.yml
-docker-compose.*.yml
+docker-compose.yml
+/shared/
